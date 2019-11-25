@@ -1,0 +1,16 @@
+#test
+SPQR{
+    totus i = 6;
+    facite {
+	    i = i - 1;
+        eventus i;
+    }dum(i > 1);
+
+    eventus "\ngg\n";
+
+    totus j = 6;
+    dum(j > 1){
+	    j = j - 1;
+        eventus j;
+    }
+}

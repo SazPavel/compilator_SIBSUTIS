@@ -1,0 +1,16 @@
+#test
+SPQR{
+   totus p = 8;
+   totus j = 0;
+   j = p - 2;
+   eventus j;
+   eventus "\n";
+   j = p + 3;
+   eventus j;
+   eventus "\n";
+   j = p * 2;
+   eventus j;
+   eventus "\n";
+   j = p / 2;
+   eventus j;
+}

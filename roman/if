@@ -1,0 +1,10 @@
+#if 
+SPQR{
+    totus i = 2;
+    si(i < 5)
+        si(i > 1)
+            i = 3;
+        aliud
+            i = 4;
+            
+}

@@ -1,0 +1,8 @@
+#if 
+SPQR{
+    totus i = 2;
+    dum(i < 5)
+        dum(i > 1)
+            i = i - 1;
+            
+}
