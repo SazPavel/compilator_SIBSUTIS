@@ -263,6 +263,22 @@ Value *codegen(PNode *root)
         Builder.SetInsertPoint(AfterBB);
         return Constant::getNullValue(Type::getInt32Ty(TheContext));
     }
+    case TyDo:
+    {
+        R = codegen(root->son1);
+        Function *TheFunction = Builder.GetInsertBlock()->getParent();
+        BasicBlock *LoopBB = BasicBlock::Create(TheContext, "loop", TheFunction);
+        Builder.CreateBr(LoopBB);
+        Builder.SetInsertPoint(LoopBB);
+        R = codegen(root->son1);
+        L = codegen(root->son2);
+        if(!L)
+            return nullptr;
+        BasicBlock *AfterBB = BasicBlock::Create(TheContext, "afterloop", TheFunction);
+        Builder.CreateCondBr(L, LoopBB, AfterBB);
+        Builder.SetInsertPoint(AfterBB);
+        return Constant::getNullValue(Type::getInt32Ty(TheContext));
+    }
     default:
         return LogErrorV("Unknown operations");
     }

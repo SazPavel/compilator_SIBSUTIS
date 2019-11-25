@@ -2,15 +2,15 @@
 SPQR{
     totus i = 6;
     dum(i > 1){
-	    i = i - 1;
+	i = i - 1;
         eventus i;
     }
 
     eventus "\ngg\n";
 
     totus j = 6;
-    dum(j > 1){
-	    j = j - 1;
+    facite{
+	j = j - 1;
         eventus j;
-    }
+    }dum(j > 1);
 }
