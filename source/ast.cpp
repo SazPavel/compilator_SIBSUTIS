@@ -1,6 +1,14 @@
 #include "ast.h"
 
-Node::Node(const char* lexeme, int type, Node *son1, Node *son2, Node *son3)
+
+PNode::PNode()
+{
+	this->son1 = NULL;
+	this->son2 = NULL;
+	this->son3 = NULL;
+}
+
+Node::Node(const char* lexeme, int type, PNode *son1, PNode *son2, PNode *son3)
 {
 	this->Type = type;
 	this->lexeme = lexeme;
@@ -9,7 +17,28 @@ Node::Node(const char* lexeme, int type, Node *son1, Node *son2, Node *son3)
 	this->son3 = son3;
 }
 
-void tree_print(Node *tree, int n)
+NumberNode::NumberNode(const char* lexeme, int type)
+{
+	this->Type = type;
+	this->lexeme = lexeme;
+}
+
+VariableNode::VariableNode(const char* lexeme, int type)
+{
+	this->Type = type;
+	this->lexeme = lexeme;
+}
+
+BinExprNode::BinExprNode(const char* lexeme, int type, PNode *son1, PNode *son2, PNode *son3)
+{
+	this->Type = type;
+	this->lexeme = lexeme;
+	this->son1 = son1;
+	this->son2 = son2;
+	this->son3 = son3;
+}
+
+void tree_print(PNode *tree, int n)
 {
 	if(tree)
 	{
@@ -27,7 +56,9 @@ void tree_print(Node *tree, int n)
 	}
 }
 
-void toJSON(rapidjson::Document& doc, Node* node){
+void toJSON(rapidjson::Document& doc, PNode* node){
+	if(node == NULL)
+		return;
 	rapidjson::Value json_val;
     rapidjson::Document::AllocatorType& allocator = doc.GetAllocator();
 

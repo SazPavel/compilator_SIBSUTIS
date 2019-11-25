@@ -4,13 +4,13 @@ SPQR{
    totus j = 0;
    j = p - 2;
    eventus j;
-   eventus "\n";
+   eventus "";
    j = p + 3;
    eventus j;
-   eventus "\n";
+   eventus "";
    j = p * 2;
    eventus j;
-   eventus "\n";
+   eventus "";
    j = p / 2;
    eventus j;
 }

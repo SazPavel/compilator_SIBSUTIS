@@ -36,15 +36,6 @@ public:
 		TS_ASSERT_EQUALS(0, scannerror);
 		TS_ASSERT_EQUALS(0, parserror);
 	}
-	void testValid2(void)
-	{
-		scannerror = 0;
-		parserror = 0;
-		yyin = fopen("./roman/2.txt", "r");
-		yyparse();
-		TS_ASSERT_EQUALS(0, scannerror);
-		TS_ASSERT_EQUALS(0, parserror);
-	}
 	void testValidaa(void)
 	{
 		scannerror = 0;

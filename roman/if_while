@@ -11,5 +11,7 @@ SPQR{
         aliud
             dum(i > 1)
                 i = i - 1;
-    } 
+    }
+
+    eventus i;
 }

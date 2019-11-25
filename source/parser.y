@@ -2,7 +2,7 @@
     #include "ast.h"
     #include <iostream>
     #include <stdio.h>
-    #define YYSTYPE Node*
+    #define YYSTYPE PNode*
     extern int yylineno;
     extern FILE *yyin;
     extern char *yytext;
@@ -15,8 +15,9 @@
     {
        return 1;
     }
-    Node *root;
+    PNode *root;
 %}
+%expect 24
 %token-table
 %token TyIf TyElse TyDo TyWhile
 %token TyInt TyFloat TyStringname TyMas
@@ -24,6 +25,7 @@
 %token TyIdentifier TyNumber TyString TySet
 %token OverEq LessEq TyEql TyNotEql TyLess TyOver
 %token TyPlus TyMinus TyMul TyDivision
+%token TyOps TySeq TyExpr
 
 %%
 
@@ -31,11 +33,11 @@ PROGRAM: TyMain OPS { $$ = new Node((char*)"main", TyMain, $2, NULL, NULL); root
 ;
 
 OPS:    OP
-|       OPS OP { $$ = new Node((char*)"seq", 1, $1, $2, NULL); }
+|       OPS OP { $$ = new Node((char*)"seq", TySeq, $1, $2, NULL); }
 ;
 
-OP1:    '{' OPS '}' { $$ = new Node((char*)"ops", 4, $2, NULL, NULL); }
-|       EXPR ';' { $$ = new Node((char*)"expr", 3, $1, NULL, NULL); }
+OP1:    '{' OPS '}' { $$ = new Node((char*)"ops", TyOps, $2, NULL, NULL); }
+|       EXPR ';' { $$ = new Node((char*)"expr", TyExpr, $1, NULL, NULL); }
 |       TyIf '(' EXPR ')' OP1 TyElse OP1 { $$ = new Node((char*)"IfElse", TyElse, $3, $5, $7); }
 |       TyWhile '(' EXPR ')' OP1 { $$ = new Node((char*)"while", TyWhile, $3, $5, NULL); }
 |       TyDo  OP1  TyWhile '(' EXPR ')' ';' { $$ = new Node((char*)"do", TyDo, $2, $5, NULL); }
@@ -46,7 +48,8 @@ OP2:    TyIf '(' EXPR ')' OP { $$ = new Node((char*)"If", TyIf, $3, $5, NULL); }
 |       TyIf '(' EXPR ')' OP1 TyElse OP2 { $$ = new Node((char*)"IfElse", TyElse, $3, $5, $7); }
 |       TyDo  OP2  TyWhile '(' EXPR ')' ';' { $$ = new Node((char*)"do", TyDo, $2, $5, NULL); }
 |       TyWhile '(' EXPR ')' OP2 { $$ = new Node((char*)"while", TyWhile, $3, $5, NULL); }
-|       TyInt ID '=' EXPR1 ';' { $$ = new Node((char*)"set", TySet, $2, $4, NULL); }
+|       TyInt ID ';' OPS { $$ = new Node((char*)"int", TyInt, $2, NULL, $4); }
+|       TyInt ID '=' EXPR1 ';' OPS { $$ = new Node((char*)"int", TyInt, $2, $4, $6); }
 //|       TyFloat ID '=' EXPR1 ';'
 |       TyStringname ID '=' STRING ';' { $$ = new Node((char*)"set", TySet, $2, $4, NULL); }
 |       TyPrint PRINT ';' { $$ = new Node((char*)"Print", TyPrint, $2, NULL, NULL); }
@@ -74,27 +77,27 @@ EXPR1:  EXPR2
 ;
 
 PRINT:  TyString { $$ = new Node((char *)yylval, TyString, NULL, NULL, NULL); }
-|       TyNumber { $$ = new Node((char *)yylval, TyNumber, NULL, NULL, NULL); }
-|       TyIdentifier { $$ = new Node((char *)yylval, TyIdentifier, NULL, NULL, NULL); }
+|       TyNumber { $$ = new NumberNode((char *)yylval, TyNumber); }
+|       TyIdentifier { $$ = new VariableNode((char *)yylval, TyIdentifier); }
 //|       TyFloat
 ;
 
 EXPR2:  TERM
-|       EXPR2 '+' TERM  { $$ = new Node((char*)"+", TyPlus, $1, $3, NULL); }
-|       EXPR2 '-' TERM  { $$ = new Node((char*)"-", TyMinus, $1, $3, NULL); }
+|       EXPR2 '+' TERM  { $$ = new BinExprNode((char*)"+", TyPlus, $1, $3, NULL); }
+|       EXPR2 '-' TERM  { $$ = new BinExprNode((char*)"-", TyMinus, $1, $3, NULL); }
 ;
 
 TERM:   VAL
-|       TERM '*' VAL { $$ = new Node((char*)"*", TyMul, $1, $3, NULL); }
-|       TERM '/' VAL { $$ = new Node((char*)"/", TyDivision, $1, $3, NULL); }
+|       TERM '*' VAL { $$ = new BinExprNode((char*)"*", TyMul, $1, $3, NULL); }
+|       TERM '/' VAL { $$ = new BinExprNode((char*)"/", TyDivision, $1, $3, NULL); }
 ;
 
-VAL:    TyNumber { $$ = new Node((char *)yylval, TyNumber, NULL, NULL, NULL); }
+VAL:    TyNumber { $$ = new NumberNode((char *)yylval, TyNumber); }
 |       '(' EXPR ')'
-|       TyIdentifier { $$ = new Node((char *)yylval, TyIdentifier, NULL, NULL, NULL); }
+|       TyIdentifier { $$ = new VariableNode((char *)yylval, TyIdentifier); }
 ;
 
-ID:     TyIdentifier { $$ = new Node((char *)yylval, TyIdentifier, NULL, NULL, NULL); }
+ID:     TyIdentifier { $$ = new VariableNode((char *)yylval, TyIdentifier); }
 ;
 
 %%

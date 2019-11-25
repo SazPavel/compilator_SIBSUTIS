@@ -1,11 +1,11 @@
 #id 
 SPQR{
-   totus i = 2;
+   totus i = 3;
+   i = 2;
    si(i < 5){
-      totus i = 7;
+      totus i;
+      i = 7;
       eventus "new i:\n";
       eventus i;
    }
-   eventus "\nold i:\n";
-   eventus i;
 }

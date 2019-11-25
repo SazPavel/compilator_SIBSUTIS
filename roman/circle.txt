@@ -1,10 +1,10 @@
 #test
 SPQR{
     totus i = 6;
-    facite {
+    dum(i > 1){
 	    i = i - 1;
         eventus i;
-    }dum(i > 1);
+    }
 
     eventus "\ngg\n";
 
