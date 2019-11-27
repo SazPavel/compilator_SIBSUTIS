@@ -17,7 +17,7 @@
     }
     PNode *root;
 %}
-%expect 24
+%expect 22
 %token-table
 %token TyIf TyElse TyDo TyWhile
 %token TyInt TyFloat TyStringname TyMas
@@ -67,7 +67,6 @@ EXPR:   EXPR1
 ;
 
 EXPR1:  EXPR2
-|       TyInvest '(' PRINT PRINT ')' { $$ = new Node((char*)"investigation", TyInvest, $3, $4, NULL); }
 |       EXPR1 OverEq EXPR2 { $$ = new Node((char*)">=", OverEq, $1, $3, NULL); }
 |       EXPR1 LessEq EXPR2 { $$ = new Node((char*)"<=", LessEq, $1, $3, NULL); }
 |       EXPR1 TyEql EXPR2 { $$ = new Node((char*)"==", TyEql, $1, $3, NULL); }
@@ -93,7 +92,7 @@ TERM:   VAL
 ;
 
 VAL:    TyNumber { $$ = new NumberNode((char *)yylval, TyNumber); }
-|       '(' EXPR ')'
+|       '(' EXPR ')' { $$ = new Node((char *)"expr", TyExpr, $2, NULL, NULL); }
 |       TyIdentifier { $$ = new VariableNode((char *)yylval, TyIdentifier); }
 ;
 

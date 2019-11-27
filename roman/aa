@@ -1,9 +1,0 @@
-#test
-SPQR{
-   filum g = "g";
-   filum gg = "gg";
-   totus f = 123;
-   gg = g + gg;
-   eventus gg;
-}
-$

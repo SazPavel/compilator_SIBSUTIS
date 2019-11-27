@@ -13,23 +13,31 @@ IRBuilder<> Builder(TheContext);
 std::map<const char*, int> BinopPrecedence;
 std::unique_ptr<Module> TheModule;
 std::map<std::string, AllocaInst *> NamedValues;
+std::unique_ptr<legacy::FunctionPassManager> TheFPM;
+
 void yyerror(char *errmsg)
 {
     parserror += 1;
     fprintf(stderr, "%s (%d, %d): %s\n", errmsg, yylineno, ch, yytext);
 }
 
+void InitializeModuleAndPassManager()
+{
+    TheModule = llvm::make_unique<Module>("Module", TheContext);
+    TheFPM = llvm::make_unique<legacy::FunctionPassManager>(TheModule.get());
+    TheFPM->doInitialization();
+}
+
 static AllocaInst *CreateEntryBlockAlloca(Function *TheFunction, const char *VarName)
 {
-    IRBuilder<> TmpB(&TheFunction->getEntryBlock(),
-                       TheFunction->getEntryBlock().begin());
+    IRBuilder<> TmpB(&TheFunction->getEntryBlock(), TheFunction->getEntryBlock().begin());
     return TmpB.CreateAlloca(Type::getInt32Ty(TheContext), nullptr, VarName);
 }
 
 Value *LogErrorV(const char *Str)
 {
     codegenerror += 1;
-    std::cout << Str << std::endl;
+    std::cout << "Codegenerror " <<  Str << std::endl;
     return nullptr;
 }
 
@@ -380,11 +388,10 @@ int main(int argc, char **argv)
                 BinopPrecedence["-"] = 20;
                 BinopPrecedence["*"] = 40;
                 BinopPrecedence["/"] = 20;
-                TheModule = llvm::make_unique<Module>("jit", TheContext);
+                InitializeModuleAndPassManager();
                 MainLoop(root);
 
                 InitializeAllTargetInfos();
-                InitializeAllTargets();
                 InitializeAllTargets();
                 InitializeAllTargetMCs();
                 InitializeAllAsmParsers();

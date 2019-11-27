@@ -40,9 +40,10 @@ public:
 	{
 		scannerror = 0;
 		parserror = 0;
-		yyin = fopen("./roman/aa", "r");
+		yyin = fopen("./roman/test", "r");
 		yyparse();
-		TS_ASSERT_EQUALS(1, scannerror);
+		TS_ASSERT_EQUALS(0, scannerror);
+		TS_ASSERT_EQUALS(0, parserror);
 	}
 	void testValidLexeme(void)
 	{
