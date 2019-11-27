@@ -36,11 +36,11 @@ public:
 		TS_ASSERT_EQUALS(0, scannerror);
 		TS_ASSERT_EQUALS(0, parserror);
 	}
-	void testValidaa(void)
+	void testValidbracket(void)
 	{
 		scannerror = 0;
 		parserror = 0;
-		yyin = fopen("./roman/test", "r");
+		yyin = fopen("./roman/bracket", "r");
 		yyparse();
 		TS_ASSERT_EQUALS(0, scannerror);
 		TS_ASSERT_EQUALS(0, parserror);
