@@ -25,6 +25,8 @@ void InitializeModuleAndPassManager()
 {
     TheModule = llvm::make_unique<Module>("Module", TheContext);
     TheFPM = llvm::make_unique<legacy::FunctionPassManager>(TheModule.get());
+    TheFPM->add(createInstructionCombiningPass());
+    TheFPM->add(createReassociatePass());
     TheFPM->doInitialization();
 }
 
@@ -323,6 +325,8 @@ void MainLoop(PNode *root)
         }else{
             return;
         }
+        IR->print(errs());
+        TheFPM->run(*IR);
         IR->print(errs());
     }
 }

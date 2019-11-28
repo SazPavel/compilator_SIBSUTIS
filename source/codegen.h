@@ -23,6 +23,7 @@
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Target/TargetMachine.h"
 #include "llvm/Target/TargetOptions.h"
+#include "llvm/Transforms/Scalar.h"
 #include <algorithm>
 #include <cassert>
 #include <cctype>
