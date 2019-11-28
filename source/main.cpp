@@ -60,7 +60,10 @@ Value *codegen(PNode *root)
     }
     case TyString:
     {
-        llvm::Constant *strFormatStr = llvm::ConstantDataArray::getString(TheContext, root->lexeme);
+    	std::string str;
+    	str = root->lexeme;
+
+        llvm::Constant *strFormatStr = llvm::ConstantDataArray::getString(TheContext, str.substr(1, str.length()-2));
         auto *strFormatStrLoc = llvm::cast<llvm::GlobalVariable>(TheModule->getOrInsertGlobal(root->lexeme, strFormatStr->getType()));
         strFormatStrLoc->setInitializer(strFormatStr);
         return strFormatStr;
@@ -325,9 +328,12 @@ void MainLoop(PNode *root)
         }else{
             return;
         }
-        IR->print(errs());
+        std::cout << std::endl << "Withoutm optimization" << std::endl;
+        TheModule->print(errs(), NULL);
         TheFPM->run(*IR);
-        IR->print(errs());
+        std::cout << std::endl << "With optimization" << std::endl;
+        //IR->print(errs());
+        TheModule->print(errs(), NULL);
     }
 }
 
