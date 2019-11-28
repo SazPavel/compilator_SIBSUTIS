@@ -1,4 +1,0 @@
-test:
-    flex 3.l
-    bison -d 3.y
-    g++ lex.yy.c 3.tab.c
