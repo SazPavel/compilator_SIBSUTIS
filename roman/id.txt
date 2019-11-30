@@ -8,4 +8,6 @@ SPQR{
       eventus "new i:\n";
       eventus i;
    }
+   eventus "old i:\n";
+   eventus i;
 }

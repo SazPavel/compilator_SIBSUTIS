@@ -10,7 +10,7 @@ using namespace llvm;
 using namespace llvm::sys;
 LLVMContext TheContext;
 IRBuilder<> Builder(TheContext);
-std::map<const char*, int> BinopPrecedence;
+//std::map<const char*, int> BinopPrecedence;
 std::unique_ptr<Module> TheModule;
 std::map<std::string, AllocaInst *> NamedValues;
 std::unique_ptr<legacy::FunctionPassManager> TheFPM;
@@ -328,7 +328,7 @@ void MainLoop(PNode *root)
         }else{
             return;
         }
-        std::cout << std::endl << "Withoutm optimization" << std::endl;
+        std::cout << std::endl << "Without optimization" << std::endl;
         TheModule->print(errs(), NULL);
         TheFPM->run(*IR);
         std::cout << std::endl << "With optimization" << std::endl;
@@ -388,16 +388,6 @@ int main(int argc, char **argv)
                     out << str << std::endl;
                 }
             }else{
-                BinopPrecedence["<"] = 10;
-                BinopPrecedence[">"] = 10;
-                BinopPrecedence["=="] = 10;
-                BinopPrecedence[">="] = 10;
-                BinopPrecedence["<="] = 10;
-                BinopPrecedence["!="] = 10;
-                BinopPrecedence["+"] = 20;
-                BinopPrecedence["-"] = 20;
-                BinopPrecedence["*"] = 40;
-                BinopPrecedence["/"] = 20;
                 InitializeModuleAndPassManager();
                 MainLoop(root);
 
@@ -449,6 +439,7 @@ int main(int argc, char **argv)
                 outs() << "Wrote " << Filename << "\n";
 
             }
+            free_tree(root);
         }
         break;
     }

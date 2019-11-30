@@ -17,7 +17,7 @@
     }
     PNode *root;
 %}
-%expect 22
+%expect 20
 %token-table
 %token TyIf TyElse TyDo TyWhile
 %token TyInt TyFloat TyStringname TyMas
@@ -50,16 +50,11 @@ OP2:    TyIf '(' EXPR ')' OP { $$ = new Node((char*)"If", TyIf, $3, $5, NULL); }
 |       TyWhile '(' EXPR ')' OP2 { $$ = new Node((char*)"while", TyWhile, $3, $5, NULL); }
 |       TyInt ID ';' OPS { $$ = new Node((char*)"int", TyInt, $2, NULL, $4); }
 |       TyInt ID '=' EXPR1 ';' OPS { $$ = new Node((char*)"int", TyInt, $2, $4, $6); }
-//|       TyFloat ID '=' EXPR1 ';'
-|       TyStringname ID '=' STRING ';' { $$ = new Node((char*)"set", TySet, $2, $4, NULL); }
 |       TyPrint PRINT ';' { $$ = new Node((char*)"Print", TyPrint, $2, NULL, NULL); }
 ;
 
 OP:     OP1
 |       OP2
-;
-
-STRING: TyString { $$ = new Node((char *)yylval, TyString, NULL, NULL, NULL); }
 ;
 
 EXPR:   EXPR1
@@ -78,7 +73,6 @@ EXPR1:  EXPR2
 PRINT:  TyString { $$ = new Node((char *)yylval, TyString, NULL, NULL, NULL); }
 |       TyNumber { $$ = new NumberNode((char *)yylval, TyNumber); }
 |       TyIdentifier { $$ = new VariableNode((char *)yylval, TyIdentifier); }
-//|       TyFloat
 ;
 
 EXPR2:  TERM

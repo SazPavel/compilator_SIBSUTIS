@@ -53,4 +53,5 @@ class BinExprNode : public PNode
 
 void toJSON(rapidjson::Document& doc, PNode* node);
 void tree_print(PNode *tree, int n);
+void free_tree(PNode *tree);
 #endif
